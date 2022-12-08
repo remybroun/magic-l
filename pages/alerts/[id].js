@@ -35,27 +35,27 @@ const AlertDetails = (props) => {
                 <div className="bg-white shadow sm:rounded-lg">
                   <div className="px-4 py-5 sm:px-6">
                     <h2 id="applicant-information-title" className="text-lg font-medium leading-6 text-gray-900">
-                      Applicant Information
+                      Alert Information
                     </h2>
                     <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
                   </div>
                   <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
                     <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                       <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Application for</dt>
-                        <dd className="mt-1 text-sm text-gray-900">Backend Developer</dd>
+                        <dt className="text-sm font-medium text-gray-500">Title</dt>
+                        <dd className="mt-1 text-sm text-gray-900">Lorem ipsum eiusmod dolore consequat sed.</dd>
                       </div>
                       <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Email address</dt>
-                        <dd className="mt-1 text-sm text-gray-900">ricardocooper@example.com</dd>
+                        <dt className="text-sm font-medium text-gray-500">Program</dt>
+                        <dd className="mt-1 text-sm text-gray-900">Lorem ipsum eiusmod dolore consequat sed.</dd>
                       </div>
                       <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Salary expectation</dt>
-                        <dd className="mt-1 text-sm text-gray-900">$120,000</dd>
+                        <dt className="text-sm font-medium text-gray-500">Date</dt>
+                        <dd className="mt-1 text-sm text-gray-900">Lorem ipsum eiusmod dolore consequat sed.</dd>
                       </div>
                       <div className="sm:col-span-1">
-                        <dt className="text-sm font-medium text-gray-500">Phone</dt>
-                        <dd className="mt-1 text-sm text-gray-900">+1 555-555-5555</dd>
+                        <dt className="text-sm font-medium text-gray-500">Journaliste</dt>
+                        <dd className="mt-1 text-sm text-gray-900">Lorem ipsum eiusmod dolore consequat sed.</dd>
                       </div>
                       <div className="sm:col-span-2">
                         <dt className="text-sm font-medium text-gray-500">About</dt>
