@@ -1,51 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { getAllFilesFrontMatter } from '@/lib/mdx'
-import siteMetadata from '@/data/siteMetadata'
-import ListLayout from '@/layouts/ListLayout'
-import { PageSEO } from '@/components/SEO'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import {api} from '../../api'
 import * as moment from 'moment';
 import { useRouter } from 'next/router';
-
-
-
-export const POSTS_PER_PAGE = 5
-
+import Pagination from '@/components/Pagination'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 
-export async function getStaticProps() {
-
-  const posts = await getAllFilesFrontMatter('blog')
-  const initialDisplayPosts = posts.slice(0, POSTS_PER_PAGE)
-  const pagination = {
-    currentPage: 1,
-    totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
-  }
-
-  return { props: { initialDisplayPosts, posts, pagination } }
-}
-
-export default function Transcripts({ posts, initialDisplayPosts, pagination }) {
-  const [alerts, setAlerts] = useState([])
+export default function Transcripts(props) {
+  const [transcripts, setTranscripts] = useState([])
+  const [pagination, setPagination] = useState({
+        totalPages:0,
+        currentPage:0,
+        count:0,
+      })
   const router = useRouter()
 
   const getData = () => {
 
-    api.transcripts().get().then((response)=>{
-      console.log(response)
-      setAlerts(response.data.results)
+    const queryString = window.location.search;
+
+    const urlParams = new URLSearchParams(queryString);
+    let page = urlParams.get('page') || 1;
+
+
+    api.alerts().get(page).then((response)=>{
+      setPagination({
+        totalPages:Math.ceil(response.data.count / 5),
+        currentPage:page,
+        count:response.data.count,
+      })
+      setTranscripts(response.data.results)
     })
   }
 
   useEffect(() => {
+
     getData()
-  }, [])
+
+  }, [props])
 
   return (
     <div className="max-w-screen-xl mx-auto">
@@ -60,14 +57,14 @@ export default function Transcripts({ posts, initialDisplayPosts, pagination }) 
                 A list of all the alerts.
               </p>
             </div>
-            <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+{/*            <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
               <button
                 type="button"
                 className="inline-flex items-center justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:w-auto"
               >
                 Add entry
               </button>
-            </div>
+            </div>*/}
           </div>
 
             <div className="mt-8 flex flex-col">
@@ -95,17 +92,17 @@ export default function Transcripts({ posts, initialDisplayPosts, pagination }) 
                         </tr>
                       </thead>
                       <tbody className="divide-y dark:divide-gray-700 divide-gray-200 bg-white dark:bg-gray-800">
-                        {alerts.map((alert, index) => (
+                        {transcripts.map((transcript, index) => (
                           <tr
                             key={index}
                             className={classNames(index === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t hover:bg-gray-100 cursor-pointer')}
                           >
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{moment(alert.start).format('ll')}</td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{alert.program}</td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{alert.source}</td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white max-w-sm truncate">{alert.text}</td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{moment(transcript.start).format('ll')}</td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{transcript.program}</td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{transcript.source}</td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white max-w-sm truncate">{transcript.text}</td>
                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                              <div className="text-green-600 hover:text-green-900 cursor-pointer" onClick={()=>{ router.push("alerts/" + alert.pk) }}>
+                              <div className="text-green-600 hover:text-green-900 cursor-pointer" onClick={()=>{ router.push("transcripts/" + transcript.pk) }}>
                                 See details &rarr;
                               </div>
                             </td>
@@ -113,6 +110,7 @@ export default function Transcripts({ posts, initialDisplayPosts, pagination }) 
                         ))}
                       </tbody>
                     </table>
+                    <Pagination path="/transcripts" pagination={pagination}/>
                   </div>
                 </div>
               </div>

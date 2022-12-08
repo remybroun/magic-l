@@ -24,9 +24,8 @@ instance.interceptors.response.use(response => {
   }, error => {
       // store.dispatch(dispatchAPIResponse(error.response))
 
-  console.log(error.response.status)
 
-    if(error.response.status === 401){
+    if(error?.response?.status === 401){
 
       axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/token/refresh/`, {"refresh": localStorage.getItem("refresh")}).then((response)=>{
         localStorage.setItem("jwt", response.data.access);
@@ -60,17 +59,17 @@ export const api = {
   },
   alerts() {
     return {
-      get: () => instance.get(`api/watch/alerts/`),
+      get: (page, offset=5) => instance.get(`api/watch/alerts?offset=${(page-1)*offset}`),
     };
   },
   transcripts() {
     return {
-      get: () => instance.get(`api/watch/transcripts/`),
+      get: (page, offset=5) => instance.get(`api/watch/transcripts?offset=${(page-1)*offset}`),
     };
   },
   documents() {
     return {
-      get: () => instance.get(`api/watch/documents/`),
+      get: (page, offset=5) => instance.get(`api/watch/documents?offset=${(page-1)*offset}`),
     };
   },
 };

@@ -1,8 +1,29 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import {api} from '../../api'
 
-const AlertDetails = () => {
+const AlertDetails = (props) => {
+
+
+  const getData = () => {
+
+    const queryString = window.location.search;
+
+    const urlParams = new URLSearchParams(queryString);
+    let page = urlParams.get('page') || 1;
+
+    // api.alerts().one(id).then((response)=>{
+    //   // setTranscripts(response.data.results)
+    // })
+  }
+
+  useEffect(() => {
+
+    getData()
+
+  }, [props])
+
 	return (
     <div className="max-w-screen-xl mx-auto">
       <Header/>
