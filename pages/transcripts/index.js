@@ -5,6 +5,7 @@ import {api} from '../../api'
 import * as moment from 'moment';
 import { useRouter } from 'next/router';
 import Pagination from '@/components/Pagination'
+import SearchBar from '@/components/SearchBar'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -13,6 +14,7 @@ function classNames(...classes) {
 
 export default function Transcripts(props) {
   const [transcripts, setTranscripts] = useState([])
+  const [selectedItems, setSelectedItems] = useState([])
   const [pagination, setPagination] = useState({
         totalPages:0,
         currentPage:0,
@@ -27,7 +29,6 @@ export default function Transcripts(props) {
     const urlParams = new URLSearchParams(queryString);
     let page = urlParams.get('page') || 1;
 
-
     api.alerts().get(page).then((response)=>{
       setPagination({
         totalPages:Math.ceil(response.data.count / 5),
@@ -38,11 +39,25 @@ export default function Transcripts(props) {
     })
   }
 
+  const exportData = (e) => {
+    console.log(selectedItems)
+  }
+
+  const addToList = (e) => {
+    let newSelectedTranscripts = {...selectedItems};
+
+    if (newSelectedTranscripts[e.target.id])
+      delete newSelectedTranscripts[e.target.id]
+    else
+      newSelectedTranscripts[e.target.id] = true
+    setSelectedItems(newSelectedTranscripts)
+  }
+
+
   useEffect(() => {
-
     getData()
-
   }, [props])
+
 
   return (
     <div className="max-w-screen-xl mx-auto">
@@ -57,14 +72,16 @@ export default function Transcripts(props) {
                 A list of all the alerts.
               </p>
             </div>
-{/*            <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <SearchBar/>
+            <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:w-auto"
+                onClick={exportData}
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 sm:w-auto"
               >
-                Add entry
+                Export
               </button>
-            </div>*/}
+            </div>
           </div>
 
             <div className="mt-8 flex flex-col">
@@ -74,6 +91,9 @@ export default function Transcripts(props) {
                     <table className="min-w-full divide-y divide-gray-300">
                       <thead className="bg-gray-50 dark:bg-gray-700">
                         <tr>
+                          <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6">
+                            Select
+                          </th>
                           <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
                             Date
                           </th>
@@ -97,6 +117,16 @@ export default function Transcripts(props) {
                             key={index}
                             className={classNames(index === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t hover:bg-gray-100 cursor-pointer')}
                           >
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white flex items-center">
+                              <input
+                                id={transcript.pk}
+                                name={transcript.pk}
+                                type="checkbox"
+                                onChange={addToList}
+                                checked={selectedItems[transcript.pk]}
+                                className="h-6 w-6 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
+                              />
+                            </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{moment(transcript.start).format('ll')}</td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{transcript.program}</td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{transcript.source}</td>

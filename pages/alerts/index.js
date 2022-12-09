@@ -3,6 +3,7 @@ import ListLayout from '@/layouts/ListLayout'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Pagination from '@/components/Pagination'
+import SearchBar from '@/components/SearchBar'
 import {api} from '../../api'
 import * as moment from 'moment';
 import { useRouter } from 'next/router';
@@ -14,6 +15,7 @@ function classNames(...classes) {
 
 export default function Alerts(props) {
   const [alerts, setAlerts] = useState([])
+  const [selectedItems, setSelectedItems] = useState([])
   const [pagination, setPagination] = useState({
         totalPages:0,
         currentPage:0,
@@ -38,11 +40,23 @@ export default function Alerts(props) {
       setAlerts(response.data.results)
     })
   }
+  
+  const exportData = (e) => {
+    console.log(selectedItems)
+  }
+
+  const addToList = (e) => {
+    let newSelectedTranscripts = {...selectedItems};
+
+    if (newSelectedTranscripts[e.target.id])
+      delete newSelectedTranscripts[e.target.id]
+    else
+      newSelectedTranscripts[e.target.id] = true
+    setSelectedItems(newSelectedTranscripts)
+  }
 
   useEffect(() => {
-
     getData()
-
   }, [props])
 
   return (
@@ -58,14 +72,16 @@ export default function Alerts(props) {
                 A list of all the alerts.
               </p>
             </div>
-{/*            <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <SearchBar/>
+            <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
               <button
                 type="button"
-                className="inline-flex items-center justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:w-auto"
+                onClick={exportData}
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 sm:w-auto"
               >
-                Add entry
+                Export
               </button>
-            </div>*/}
+            </div>
           </div>
 
             <div className="mt-8 flex flex-col">
@@ -76,13 +92,16 @@ export default function Alerts(props) {
                       <thead className="bg-gray-50 dark:bg-gray-700">
                         <tr>
                           <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6">
-                            Name
+                            Select
+                          </th>
+                          <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6">
+                            Nom
                           </th>
                           <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                            Program
+                            Programme
                           </th>
                           <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                            Journalist
+                            Journaliste
                           </th>
                           <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
                             Date
@@ -98,14 +117,25 @@ export default function Alerts(props) {
                             key={index}
                             className={classNames(index === 0 ? 'border-gray-300' : 'border-gray-200', 'border-t')}
                           >
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white flex items-center">
+                              <input
+                                id={alert.pk}
+                                name={alert.pk}
+                                type="checkbox"
+                                onChange={addToList}
+                                checked={selectedItems[alert.pk]}
+                                className="h-6 w-6 rounded border-gray-300 text-black focus:ring-black cursor-pointer"
+                              />
+                            </td>
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-6">
                               {alert.title}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{alert.program}</td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{alert.journalist}</td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{moment(alert.start).format('llll')}</td>
+
                             <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                              <div className="text-green-600 hover:text-green-900 cursor-pointer" onClick={()=>{ router.push("alerts/" + alert.pk) }}>
+                              <div className="text-black hover:text-black cursor-pointer" onClick={()=>{ router.push("alerts/" + alert.pk) }}>
                                 See details &rarr;
                               </div>
                             </td>
