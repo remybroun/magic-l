@@ -3,7 +3,7 @@ import ListLayout from '@/layouts/ListLayout'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Pagination from '@/components/Pagination'
-import SearchBar from '@/components/SearchBar'
+import SearchBar from '@/components/Searchbar'
 import {api} from '../../api'
 import * as moment from 'moment';
 import { useRouter } from 'next/router';

@@ -5,7 +5,7 @@ import {api} from '../../api'
 import * as moment from 'moment';
 import { useRouter } from 'next/router';
 import Pagination from '@/components/Pagination'
-import SearchBar from '@/components/SearchBar'
+import SearchBar from '@/components/Searchbar'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
