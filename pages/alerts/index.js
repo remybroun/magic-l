@@ -3,6 +3,7 @@ import ListLayout from '@/layouts/ListLayout'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Pagination from '@/components/Pagination'
+import SaveDocumentModal from '@/components/modals/SaveDocumentModal'
 import SearchBar from '@/components/Searchbar'
 import {api} from '../../api'
 import * as moment from 'moment';
@@ -15,6 +16,7 @@ function classNames(...classes) {
 
 export default function Alerts(props) {
   const [alerts, setAlerts] = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
   const [selectedItems, setSelectedItems] = useState([])
   const [pagination, setPagination] = useState({
         totalPages:0,
@@ -29,9 +31,10 @@ export default function Alerts(props) {
 
     const urlParams = new URLSearchParams(queryString);
     let page = urlParams.get('page') || 1;
+    let search = urlParams.get('search');
+    console.log(page, search)
 
-
-    api.alerts().get(page).then((response)=>{
+    api.alerts().get({page, search}).then((response)=>{
       setPagination({
         totalPages:Math.ceil(response.data.count / 5),
         currentPage:page,
@@ -43,7 +46,40 @@ export default function Alerts(props) {
   
   const exportData = (e) => {
     console.log(selectedItems)
+    setModalOpen(!modalOpen)
   }
+
+  const removeParams = (param) => {
+    const params = new URLSearchParams(router.query);
+    params.delete(param);
+    router.replace({ pathname:router.pathname, query: params.toString() }, undefined, { shallow: true });
+  };
+
+  const createDocument = ({type, name}) => {
+    let items = Object.keys(selectedItems).map(key => {return parseInt(key)});
+    console.log(items)
+    api.documents().createDocument({type:type.toLowerCase(), name, alerts:items}).then((response) => {
+      console.log(response)
+    })
+    setModalOpen(false)
+  }
+
+  const searchForTerm = (term) => {
+    let page = 0
+
+    if (!term){
+      removeParams('search')
+      return
+    }
+
+    router.query.search = term
+    router.push(router)
+
+    getData()
+
+  }
+
+
 
   const addToList = (e) => {
     let newSelectedTranscripts = {...selectedItems};
@@ -72,7 +108,7 @@ export default function Alerts(props) {
                 A list of all the alerts.
               </p>
             </div>
-            <SearchBar/>
+            <SearchBar onSubmit={searchForTerm}/>
             <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
               <button
                 type="button"
@@ -152,6 +188,10 @@ export default function Alerts(props) {
 
 
       </div>
+      <SaveDocumentModal 
+        show={modalOpen} 
+        close={()=>setModalOpen(false)}
+        createDocument={createDocument}/>
       <Footer/>
     </div>
   )

@@ -58,18 +58,22 @@ export const api = {
     };
   },
   alerts() {
-    return {
-      get: (page, offset=5) => instance.get(`api/watch/alerts?offset=${(page-1)*offset}`),
+    return { 
+      get: (params, offset=5) => instance.get(`api/watch/alerts?offset=${(params.page-1)*offset}/${params.search ? ("&search=" + params.search) : ""}`),
+      one: (id) => instance.get(`api/watch/alerts/${id}`),
     };
   },
   transcripts() {
     return {
-      get: (page, offset=5) => instance.get(`api/watch/transcripts?offset=${(page-1)*offset}`),
+      get: (params, offset=5) => instance.get(`api/watch/transcripts?offset=${(params.page-1)*offset}/${params.search ? ("&search=" + params.search) : ""}`),
+      one: (id) => instance.get(`api/watch/transcripts/${id}`),
     };
   },
   documents() {
     return {
       get: (page, offset=5) => instance.get(`api/watch/documents?offset=${(page-1)*offset}`),
+      createDocument: (obj) => instance.post(`api/watch/documents/`, obj),
+      download: (id) => instance.get(`api/watch/documents/${id}`),
     };
   },
 };

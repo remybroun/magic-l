@@ -3,57 +3,23 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import {api} from '../../api'
 
-
-export const getStaticPaths = async (context) => {
-		
-    
-    // api.alerts().get(1).then((response)=>{
-
-    //   totalPages = Math.ceil(response.data.count / 5)
-
-    // })
-
-    return { paths: [], fallback: true };
-  }
+const TranscriptDetails = (props) => {
 
 
-export const getStaticProps = async (context) => {
-	const id = context.params.id
-	// const resp = MAKE API CALL FOR 1 OBJ
-	let alert = {}
-	console.log(id)
-	if(!id)
-		return {
-			props: {  }
-		}
-  api.alerts().one(id).then((response)=>{
-    alert = response.data
-  })
-
-	return {
-		props: { alert, id }
-	}
-}
-
-
-const AlertDetails = (props) => {
-	const [alert, setAlert] = useState({})
   const getData = () => {
 
     const queryString = window.location.search;
 
     const urlParams = new URLSearchParams(queryString);
     let page = urlParams.get('page') || 1;
-    if (!props.id)
-    	return
-    api.alerts().one(props.id).then((response)=>{
-    	setAlert(response.data)
-    	console.log(response)
-    })
+
+    // api.alerts().one(id).then((response)=>{
+    //   // setTranscripts(response.data.results)
+    // })
   }
 
   useEffect(() => {
-  	console.log(props)
+
     getData()
 
   }, [props])
@@ -75,47 +41,22 @@ const AlertDetails = (props) => {
                   </div>
                   <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
                     <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">Alarm_date</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.alarm_date}</dd>
-</div>
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">End</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.end}</dd>
-</div>
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">Journalist</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.journalist}</dd>
-</div>
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">Key_words</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.key_words}</dd>
-</div>
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">Program</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.program}</dd>
-</div>
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">Source</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.source}</dd>
-</div>
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">Start</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.start}</dd>
-</div>
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">Summary</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.summary}</dd>
-</div>
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">Title</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.title}</dd>
-</div>
-<div className="sm:col-span-1">
-  <dt className="text-sm font-medium text-gray-500">Video_link</dt>
-  <dd className="mt-1 text-sm text-gray-900">{alert?.video_link}</dd>
-</div>
+                      <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Title</dt>
+                        <dd className="mt-1 text-sm text-gray-900">Lorem ipsum eiusmod dolore consequat sed.</dd>
+                      </div>
+                      <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Program</dt>
+                        <dd className="mt-1 text-sm text-gray-900">Lorem ipsum eiusmod dolore consequat sed.</dd>
+                      </div>
+                      <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Date</dt>
+                        <dd className="mt-1 text-sm text-gray-900">Lorem ipsum eiusmod dolore consequat sed.</dd>
+                      </div>
+                      <div className="sm:col-span-1">
+                        <dt className="text-sm font-medium text-gray-500">Journaliste</dt>
+                        <dd className="mt-1 text-sm text-gray-900">Lorem ipsum eiusmod dolore consequat sed.</dd>
+                      </div>
                       <div className="sm:col-span-2">
                         <dt className="text-sm font-medium text-gray-500">About</dt>
                         <dd className="mt-1 text-sm text-gray-900">
@@ -148,4 +89,4 @@ const AlertDetails = (props) => {
 	)
 }
 
-export default AlertDetails
+export default TranscriptDetails

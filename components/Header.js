@@ -12,8 +12,8 @@ const Header = () => {
         <Link href="/">
           <div className="flex items-center justify-between">
             <div className="mr-3 flex items-center gap-3 font-medium">
-              <Image width={50} height={50} src="/static/images/logo.png" className="w-full"/>
-              Magic Lemp
+              <Image width={140} height={50} src="/static/images/logo_pluralisme_web.svg" className="w-full"/>
+
             </div>
           </div>
         </Link>
