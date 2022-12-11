@@ -26,9 +26,11 @@ instance.interceptors.response.use(response => {
 
 
     if(error?.response?.status === 401){
-
       axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/token/refresh/`, {"refresh": localStorage.getItem("refresh")}).then((response)=>{
         localStorage.setItem("jwt", response.data.access);
+      })
+      .catch((error) => {
+        window.location.href = '/auth/login';
       })
     }
       return Promise.reject(error);
@@ -36,6 +38,11 @@ instance.interceptors.response.use(response => {
 
 instance.interceptors.request.use(
   async (config) => {
+
+
+    if (!localStorage.getItem("jwt"))
+      window.location.href = '/auth/login';
+
     config.headers = {
       "Content-Type": "application/json",
       "Accept": "application/json",
@@ -59,13 +66,13 @@ export const api = {
   },
   alerts() {
     return { 
-      get: (params, offset=5) => instance.get(`api/watch/alerts?offset=${(params.page-1)*offset}/${params.search ? ("&search=" + params.search) : ""}`),
+      get: (params, offset=5) => instance.get(`api/watch/alerts?offset=${(params.page-1)*offset}${params.search ? ("&search=" + params.search) : ""}`),
       one: (id) => instance.get(`api/watch/alerts/${id}`),
     };
   },
   transcripts() {
     return {
-      get: (params, offset=5) => instance.get(`api/watch/transcripts?offset=${(params.page-1)*offset}/${params.search ? ("&search=" + params.search) : ""}`),
+      get: (params, offset=5) => instance.get(`api/watch/transcripts?offset=${(params.page-1)*offset}${params.search ? ("&search=" + params.search) : ""}`),
       one: (id) => instance.get(`api/watch/transcripts/${id}`),
     };
   },

@@ -6,14 +6,15 @@ import * as moment from 'moment';
 import { useRouter } from 'next/router';
 import Pagination from '@/components/Pagination'
 import SearchBar from '@/components/Searchbar'
+import SaveDocumentModal from '@/components/modals/SaveDocumentModal'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-
 export default function Transcripts(props) {
   const [transcripts, setTranscripts] = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
   const [selectedItems, setSelectedItems] = useState([])
   const [pagination, setPagination] = useState({
         totalPages:0,
@@ -28,8 +29,9 @@ export default function Transcripts(props) {
 
     const urlParams = new URLSearchParams(queryString);
     let page = urlParams.get('page') || 1;
+    let search = urlParams.get('search');
 
-    api.alerts().get(page).then((response)=>{
+    api.transcripts().get({page, search}).then((response)=>{
       setPagination({
         totalPages:Math.ceil(response.data.count / 5),
         currentPage:page,
@@ -40,7 +42,35 @@ export default function Transcripts(props) {
   }
 
   const exportData = (e) => {
-    console.log(selectedItems)
+    setModalOpen(!modalOpen);
+  }
+
+  const removeParams = (param) => {
+    const params = new URLSearchParams(router.query);
+    params.delete(param);
+    router.replace({ pathname:router.pathname, query: params.toString() }, undefined, { shallow: true });
+  };
+
+  const createDocument = ({type, name}) => {
+    let items = Object.keys(selectedItems).map(key => {return parseInt(key)});
+    api.documents().createDocument({type:type.toLowerCase(), name, alerts:items})
+    setSelectedItems([])
+    setModalOpen(false)
+  }
+
+  const searchForTerm = (term) => {
+    let page = 0
+
+    if (!term){
+      removeParams('search')
+      return
+    }
+
+    router.query.search = term
+    router.push(router)
+
+    getData()
+
   }
 
   const addToList = (e) => {
@@ -52,7 +82,6 @@ export default function Transcripts(props) {
       newSelectedTranscripts[e.target.id] = true
     setSelectedItems(newSelectedTranscripts)
   }
-
 
   useEffect(() => {
     getData()
@@ -145,10 +174,12 @@ export default function Transcripts(props) {
                 </div>
               </div>
             </div>
+        </div>
       </div>
-
-
-      </div>
+      <SaveDocumentModal 
+        show={modalOpen} 
+        close={()=>setModalOpen(false)}
+        createDocument={createDocument}/>
       <Footer/>
     </div>
   )

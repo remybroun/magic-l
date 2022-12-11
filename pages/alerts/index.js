@@ -32,7 +32,6 @@ export default function Alerts(props) {
     const urlParams = new URLSearchParams(queryString);
     let page = urlParams.get('page') || 1;
     let search = urlParams.get('search');
-    console.log(page, search)
 
     api.alerts().get({page, search}).then((response)=>{
       setPagination({
@@ -45,7 +44,6 @@ export default function Alerts(props) {
   }
   
   const exportData = (e) => {
-    console.log(selectedItems)
     setModalOpen(!modalOpen)
   }
 
@@ -57,10 +55,8 @@ export default function Alerts(props) {
 
   const createDocument = ({type, name}) => {
     let items = Object.keys(selectedItems).map(key => {return parseInt(key)});
-    console.log(items)
-    api.documents().createDocument({type:type.toLowerCase(), name, alerts:items}).then((response) => {
-      console.log(response)
-    })
+    api.documents().createDocument({type:type.toLowerCase(), name, alerts:items})
+    setSelectedItems([])
     setModalOpen(false)
   }
 
@@ -78,8 +74,6 @@ export default function Alerts(props) {
     getData()
 
   }
-
-
 
   const addToList = (e) => {
     let newSelectedTranscripts = {...selectedItems};

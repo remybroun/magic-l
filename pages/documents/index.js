@@ -42,12 +42,17 @@ export default function Documents(props) {
   
   function download(id, filename) {
     const link = document.createElement("a");
-    link.href = process.env.NEXT_PUBLIC_BACKEND_URL + `api/documents/${id}/download/`;
+    link.href = process.env.NEXT_PUBLIC_BACKEND_URL + `/api/watch/documents/${id}/download/`;
+    link.target = "_blank";
     link.download = "untitled";
     link.click();
   }
-   
 
+  function capitalizeWords(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+
+}
+   
   const addToList = (e) => {
     let newSelectedTranscripts = {...selectedItems};
 
@@ -87,6 +92,9 @@ export default function Documents(props) {
                           <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6">
                             Nom
                           </th>
+                          <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-6">
+                            Type
+                          </th>
                           <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">
                             Date
                           </th>
@@ -103,6 +111,9 @@ export default function Documents(props) {
                           >
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-6">
                               {documentItem.name}
+                            </td>
+                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-6">
+                              {capitalizeWords(documentItem.type)}
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-white">{moment(documentItem.start).format('llll')}</td>
 
