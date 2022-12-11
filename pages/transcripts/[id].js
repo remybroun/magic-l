@@ -19,9 +19,13 @@ export const getStaticProps = async (context) => {
 		return {
 			props: {  }
 		}
-  api.transcripts().one(id).then((response)=>{
-    alert = response.data
-  })
+
+  try {
+	  api.transcripts().one(id).then((response)=>{
+	    alert = response.data
+	  })
+  } catch (err) { console.log(err) };
+
 
 	return {
 		props: { alert, id }
@@ -39,9 +43,12 @@ const AlertDetails = (props) => {
     let page = urlParams.get('page') || 1;
     if (!props.id)
     	return
-    api.transcripts().one(props.id).then((response)=>{
-    	setAlert(response.data)
-    })
+		try {
+		  api.transcripts().one(props.id).then((response)=>{
+		  	setAlert(response.data)
+		  })
+		} catch (err) { console.log(err) };
+
   }
 
   useEffect(() => {
