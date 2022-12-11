@@ -66,13 +66,13 @@ export const api = {
   },
   alerts() {
     return { 
-      get: (params, offset=5) => instance.get(`api/watch/alerts?offset=${(params.page-1)*offset}${params.search ? ("&search=" + params.search) : ""}`),
+      get: (params, offset=5) => instance.get(`api/watch/alerts?offset=${(params.page-1)*offset}${params.search ? ("&search=" + params.search) : ""}${params.start ? ("&start=" + params.start) : ""}${params.end ? ("&end=" + params.end) : ""}`),
       one: (id) => instance.get(`api/watch/alerts/${id}`),
     };
   },
   transcripts() {
     return {
-      get: (params, offset=5) => instance.get(`api/watch/transcripts?offset=${(params.page-1)*offset}${params.search ? ("&search=" + params.search) : ""}`),
+      get: (params, offset=5) => instance.get(`api/watch/transcripts?offset=${(params.page-1)*offset}${params.search ? ("&search=" + params.search) : ""}${params.start ? ("&start=" + params.start) : ""}${params.end ? ("&end=" + params.end) : ""}`),
       one: (id) => instance.get(`api/watch/transcripts/${id}`),
     };
   },

@@ -32,8 +32,10 @@ export default function Alerts(props) {
     const urlParams = new URLSearchParams(queryString);
     let page = urlParams.get('page') || 1;
     let search = urlParams.get('search');
+    let start = urlParams.get('start');
+    let end = urlParams.get('end');
 
-    api.alerts().get({page, search}).then((response)=>{
+    api.alerts().get({page, search, start, end}).then((response)=>{
       setPagination({
         totalPages:Math.ceil(response.data.count / 5),
         currentPage:page,
@@ -61,18 +63,25 @@ export default function Alerts(props) {
   }
 
   const searchForTerm = (term) => {
-    let page = 0
-
     if (!term){
       removeParams('search')
       return
     }
-
     router.query.search = term
     router.push(router)
-
     getData()
 
+  }
+
+  const addFilterTerm = (key, value) => {
+    if(!value){
+      removeParams(key)
+      return
+    }
+
+    router.query[key] = value
+    router.push(router)
+    getData()
   }
 
   const addToList = (e) => {
@@ -94,15 +103,36 @@ export default function Alerts(props) {
       <Header/>
       <div className="mx-auto">
 
-        <div className="px-4 sm:px-6 lg:px-8  max-w-screen-xl mx-auto">
-          <div className="sm:flex sm:items-center">
+        <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl mx-auto">
+          <div className="sm:flex sm:items-end">
             <div className="sm:flex-auto">
               <h1 className="text-xl font-semibold text-gray-900">Alerts</h1>
               <p className="mt-2 text-sm text-gray-700">
-                A list of all the alerts.
+                Une liste de toutes les alertes
               </p>
             </div>
-            <SearchBar onSubmit={searchForTerm}/>
+
+            <div className="flex items-end gap-2">
+
+              <div className="space-y-1">
+                <p className="text-xs">De</p>
+                <input className="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" 
+                       type="date" 
+                       name="start"
+                       onChange={(e)=>{addFilterTerm("start", (e.target.value ? moment(e.target.value).toISOString() : null))}}/>
+              </div>
+              <div className="space-y-1">
+                <p className="text-xs">A</p>
+                <input className="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" 
+                       type="date" 
+                       name="end"
+                       onChange={(e)=>{addFilterTerm("end", (e.target.value ? moment(e.target.value).toISOString() : null))}}/>
+              
+              </div>
+              <SearchBar onSubmit={searchForTerm}/>
+            </div>
+
+            
             <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
               <button
                 type="button"

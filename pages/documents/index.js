@@ -45,13 +45,14 @@ export default function Documents(props) {
     link.href = process.env.NEXT_PUBLIC_BACKEND_URL + `/api/watch/documents/${id}/download/`;
     link.target = "_blank";
     link.download = "untitled";
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   }
 
   function capitalizeWords(string) {
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
-
-}
+  }
    
   const addToList = (e) => {
     let newSelectedTranscripts = {...selectedItems};
