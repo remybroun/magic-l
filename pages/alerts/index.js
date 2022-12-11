@@ -104,7 +104,7 @@ export default function Alerts(props) {
       <div className="mx-auto">
 
         <div className="px-4 sm:px-6 lg:px-8 max-w-screen-xl mx-auto">
-          <div className="sm:flex sm:items-end">
+          <div className="lg:flex lg:items-end">
             <div className="sm:flex-auto">
               <h1 className="text-xl font-semibold text-gray-900">Alerts</h1>
               <p className="mt-2 text-sm text-gray-700">
@@ -112,7 +112,7 @@ export default function Alerts(props) {
               </p>
             </div>
 
-            <div className="flex items-end gap-2">
+            <div className="md:flex items-end gap-2">
 
               <div className="space-y-1">
                 <p className="text-xs">De</p>

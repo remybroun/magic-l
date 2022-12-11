@@ -15,29 +15,22 @@ const Login = (props) => {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    console.log(isAuthentificated)
     
-    router.push("/")
 
     api.auth().login(userName, password).then((response) => {
       localStorage.setItem("jwt", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
       setIsAuthentificated(true)
+      router.push("/")
 
     //   // snackbar().success('Success!', 'You are now logged in').show()
-    // }).catch(()=>{
+    }).catch((error)=>{
+      console.log(error.message)
     //   // snackbar().danger('Login Failed', 'Check your username and password').show()
 
     })
 
   }
-
-
-  // if(props.isAuthenticated)
-  //   if (props.user.role === "admin")
-  //     return <Redirect to="/admin/food" />
-  //   else
-  //     return <Redirect to="/food" />
 
 
   return (

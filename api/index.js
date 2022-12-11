@@ -22,9 +22,6 @@ instance.interceptors.response.use(response => {
 
     return response
   }, error => {
-      // store.dispatch(dispatchAPIResponse(error.response))
-
-
     if(error?.response?.status === 401){
       axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + `/api/token/refresh/`, {"refresh": localStorage.getItem("refresh")}).then((response)=>{
         localStorage.setItem("jwt", response.data.access);
@@ -40,7 +37,7 @@ instance.interceptors.request.use(
   async (config) => {
 
 
-    if (!localStorage.getItem("jwt"))
+    if (!localStorage.getItem("jwt") && window.location.pathname != "/auth/login")
       window.location.href = '/auth/login';
 
     config.headers = {

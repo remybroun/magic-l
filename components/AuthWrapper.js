@@ -11,8 +11,8 @@ const AuthWrapper = ({ children }) => {
 
 		const token = localStorage.getItem("jwt"); 
 		if (!token && window.location.pathname !== '/auth/login'){
+			// console.log("REDIRECT")
 			router.push("/auth/login")
-
 		}
 		
 	}, [])
