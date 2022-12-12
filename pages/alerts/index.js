@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ListLayout from '@/layouts/ListLayout'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import Pagination from '@/components/Pagination'
@@ -8,7 +7,6 @@ import SearchBar from '@/components/Searchbar'
 import {api} from '../../api'
 import * as moment from 'moment';
 import { useRouter } from 'next/router';
-
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -134,13 +132,12 @@ export default function Alerts(props) {
 
             
             <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-              <button
-                type="button"
-                onClick={exportData}
+              <div
+                onClick={()=>setModalOpen(!modalOpen)}
                 className="inline-flex items-center justify-center rounded-md border border-transparent bg-black px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 sm:w-auto"
               >
                 Export
-              </button>
+              </div>
             </div>
           </div>
 
@@ -208,14 +205,12 @@ export default function Alerts(props) {
                 </div>
               </div>
             </div>
-      </div>
-
-
-      </div>
-      <SaveDocumentModal 
-        show={modalOpen} 
-        close={()=>setModalOpen(false)}
-        createDocument={createDocument}/>
+          </div>
+        </div>
+        <SaveDocumentModal 
+          show={modalOpen} 
+          close={()=>setModalOpen(false)}
+          createDocument={createDocument}/>
       <Footer/>
     </div>
   )

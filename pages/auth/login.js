@@ -21,6 +21,7 @@ const Login = (props) => {
       localStorage.setItem("jwt", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
       setIsAuthentificated(true)
+      console.log(isAuthentificated)
       router.push("/")
 
     //   // snackbar().success('Success!', 'You are now logged in').show()
