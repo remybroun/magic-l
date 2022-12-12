@@ -12,23 +12,14 @@ export const getStaticPaths = async (context) => {
 
 export const getStaticProps = async (context) => {
 	const id = context.params.id
-	// const resp = MAKE API CALL FOR 1 OBJ
-	let alert = {}
-
+	
 	if(!id)
 		return {
 			props: {  }
 		}
 
-  try {
-	  api.transcripts().one(id).then((response)=>{
-	    alert = response.data
-	  })
-  } catch (err) { console.log(err) };
-
-
 	return {
-		props: { alert, id }
+		props: { id }
 	}
 }
 
